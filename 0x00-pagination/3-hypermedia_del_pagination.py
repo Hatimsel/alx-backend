@@ -52,6 +52,8 @@ class Server:
         return self.__indexed_dataset
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
+        """Returns a dict of key/value pairs
+        """
         if index:
             assert (index < len(self.indexed_dataset()))
             page = int(index / page_size)
