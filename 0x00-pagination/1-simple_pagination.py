@@ -2,10 +2,10 @@
 """Simple helper function"""
 import csv
 import math
-from typing import List
+from typing import List, Tuple
 
 
-def index_range(page: int, page_size: int) -> tuple:
+def index_range(page: int, page_size: int) -> Tuple[int, int]:
     """Takes two arguments
     page: the page number
     page_size: the page size
@@ -37,13 +37,13 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        assert (type(page) is int)
-        assert (type(page_size) is int)
-        assert (page > 0)
-        assert (page_size > 0)
+        assert isinstance(page, int) and page > 0
+        assert isinstance(page_size, int) and page_size > 0
+
         index_rg = index_range(page, page_size)
         data_set = self.dataset()
-        if index_rg[0] > len(data_set) or index_rg[1] > len(data_set):
+
+        if index_rg[0] >= len(data_set):
             return []
 
         return data_set[index_rg[0]:index_rg[1]]
