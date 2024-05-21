@@ -16,11 +16,11 @@ class FIFOCache(BaseCaching):
     def put(self, key: str, item: str) -> None:
         """Assigns the item to key in cache_data dict"""
         if key and item:
-            if len(self.cache_data.items()) > self.MAX_ITEMS:
+            if len(list(self.cache_data.keys())) >= self.MAX_ITEMS:
                 keys = list(self.cache_data.keys())
-                # print(keys)
                 del self.cache_data[keys[0]]
                 print("DISCARD: {}".format(keys[0]))
+
             self.cache_data.update({key: item})
 
     def get(self, key: str) -> Union[str, None]:
