@@ -31,11 +31,12 @@ class LRUCache(BaseCaching):
             self.counter.update({key: self.MAX_ITEMS})
 
     def get(self, key: str) -> Union[str, None]:
-        """Retrives the value linked to key if exists in cache_data
-        """
+        """Retrives the value linked to key if exists in cache_data"""
         if key and key in self.cache_data.keys():
             if key in self.counter.keys():
                 val = self.counter.get(key) + 1
                 self.counter.update({key: val})
+            else:
+                self.counter.update({key: self.MAX_ITEMS})
             return self.cache_data.get(key)
         return None
