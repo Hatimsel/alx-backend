@@ -2,6 +2,7 @@
 """Basic flask app"""
 from flask import Flask, render_template, request
 from flask_babel import Babel, _
+from typing import Optional
 
 
 class Config:
@@ -24,7 +25,7 @@ def welcome_to_holberton():
 
 
 @babel.localeselector
-def get_locale():
+def get_locale() -> Optional[str]:
     """Determines the best locale"""
     # print(app.config['LANGUAGES'])
     # print(dir(request))
