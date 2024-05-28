@@ -3,7 +3,7 @@
 from flask import Flask, render_template, request, g
 from flask_babel import Babel, _
 from typing import Optional, Union, Dict
-from pytz import timezone
+from pytz import timezone, UnknownTimeZoneError
 
 
 users = {
@@ -38,13 +38,12 @@ def welcome_to_holberton():
 def get_locale() -> Optional[str]:
     """Determines the best locale"""
     if request.args:
-        dict_args = dict(request.args)
-        if 'locale' in dict_args and dict_args['locale']\
-                in app.config['LANGUAGES']:
-            return dict_args['locale']
+        locale = request.args.get('locale')
+        if locale and locale in app.config['LANGUAGES']:
+            return locale
     user = getattr(g, 'user', None)
     if user:
-        return user.locale
+        return user.get('locale')
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
@@ -73,19 +72,21 @@ def get_timezone() -> Union[str, None]:
             try:
                 timezone(tz)
                 return tz
-            except Exception as e:
-                print(e)
+            except UnknownTimeZoneError:
+                print(f'Unkown timezone: {tz}')
+
+
 
     user = getattr(g, 'user', None)
     if user:
-        tz = user.timezone
+        tz = user.get('timezone')
         try:
             timezone(tz)
             return tz
-        except Exception as e:
-            print(e)
+        except UnknownTimeZoneError:
+            print(f'Unkown timezone: {tz}')
 
-    # return app.conig['BABEL_DEFAULT_TIMEZONE']
+    return app.config['BABEL_DEFAULT_TIMEZONE']
 
 
 if __name__ == "__main__":
