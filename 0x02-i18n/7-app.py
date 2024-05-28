@@ -27,13 +27,6 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 
-@app.route("/", methods=['GET'])
-def welcome_to_holberton():
-    """The welcome page"""
-    user = getattr(g, 'user', None)
-    return render_template('7-index.html', user=user)
-
-
 @babel.localeselector
 def get_locale() -> Optional[str]:
     """Determines the best locale"""
@@ -42,8 +35,10 @@ def get_locale() -> Optional[str]:
         if locale and locale in app.config['LANGUAGES']:
             return locale
     user = getattr(g, 'user', None)
+    
     if user:
         return user.get('locale')
+    
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
@@ -51,8 +46,10 @@ def get_user() -> Union[Dict, None]:
     """Getting the user dictionary or None"""
     if request.args:
         login_as = request.args.get('login_as')
+        
         if login_as and login_as.isdigit():
             return users.get(int(login_as))
+        
         return None
 
 
@@ -75,18 +72,26 @@ def get_timezone() -> Union[str, None]:
             except UnknownTimeZoneError:
                 print(f'Unkown timezone: {tz}')
 
-
-
     user = getattr(g, 'user', None)
+    
     if user:
         tz = user.get('timezone')
         try:
             timezone(tz)
             return tz
+        
         except UnknownTimeZoneError:
             print(f'Unkown timezone: {tz}')
 
     return app.config['BABEL_DEFAULT_TIMEZONE']
+
+
+@app.route("/", methods=['GET'])
+def welcome_to_holberton():
+    """The welcome page"""
+    user = getattr(g, 'user', None)
+    
+    return render_template('7-index.html', user=user)
 
 
 if __name__ == "__main__":

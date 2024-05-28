@@ -26,24 +26,19 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 
-@app.route("/", methods=['GET'])
-def welcome_to_holberton():
-    """The welcome page"""
-    user = getattr(g, 'user', None)
-    return render_template('6-index.html', user=user)
-
-
 @babel.localeselector
 def get_locale() -> Optional[str]:
     """Determines the best locale"""
     if request.args:
-        dict_args = dict(request.args)
-        if 'locale' in dict_args and dict_args['locale']\
-                in app.config['LANGUAGES']:
-            return dict_args['locale']
+        locale = request.args.get('locale')
+        if locale and locale in app.config['LANGUAGES']:
+            return locale
+    
     user = getattr(g, 'user', None)
+    
     if user:
-        return user.locale
+        return user.get('locale')
+    
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
@@ -61,6 +56,13 @@ def before_request() -> None:
     """Finds the user if any and sets it as a global
     on flask.g.user"""
     g.user = get_user()
+
+
+@app.route("/", methods=['GET'])
+def welcome_to_holberton():
+    """The welcome page"""
+    user = getattr(g, 'user', None)
+    return render_template('6-index.html', user=user)
 
 
 if __name__ == "__main__":

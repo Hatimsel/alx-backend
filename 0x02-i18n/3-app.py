@@ -18,19 +18,16 @@ app.config.from_object(Config)
 babel = Babel(app)
 
 
+@babel.localeselector
+def get_locale() -> Optional[str]:
+    """Determines the best locale"""
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+
 @app.route("/", methods=['GET'])
 def welcome_to_holberton():
     """The welcome page"""
     return render_template('3-index.html')
-
-
-@babel.localeselector
-def get_locale() -> Optional[str]:
-    """Determines the best locale"""
-    # print(app.config['LANGUAGES'])
-    # print(dir(request))
-    # print(request.accept_languages.best_match(app.config['LANGUAGES']))
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 if __name__ == "__main__":
