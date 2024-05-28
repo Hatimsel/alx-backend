@@ -6,7 +6,9 @@ from typing import Optional
 
 
 class Config:
-    """Configuration class"""
+    """
+    Configuration class fro our app
+    """
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = "en"
     BABEL_DEFAULT_TIMEZONE = "UTC"
@@ -20,13 +22,17 @@ babel = Babel(app)
 
 @babel.localeselector
 def get_locale() -> Optional[str]:
-    """Determines the best locale"""
+    """
+    Determines the best locale
+    """
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 @app.route("/", methods=['GET'])
 def welcome_to_holberton():
-    """The welcome page"""
+    """
+    The welcome page
+    """
     return render_template('3-index.html')
 
 

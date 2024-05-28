@@ -20,7 +20,9 @@ babel = Babel(app)
 
 @babel.localeselector
 def get_locale() -> Optional[str]:
-    """Determines the best locale"""
+    """
+    Determines the best locale
+    """
     if request.args:
         locale = request.args.get('locale')
         if locale and locale in app.config['LANGUAGES']:
@@ -30,7 +32,9 @@ def get_locale() -> Optional[str]:
 
 @app.route("/", methods=['GET'])
 def welcome_to_holberton():
-    """The welcome page"""
+    """
+    The welcome page
+    """
     return render_template('4-index.html')
 
 
