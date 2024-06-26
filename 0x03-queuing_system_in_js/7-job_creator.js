@@ -1,6 +1,5 @@
 import { createQueue } from 'kue';
 
-// Array of jobs
 const jobs = [
   {
     phoneNumber: '4153518780',
@@ -48,10 +47,8 @@ const jobs = [
   }
 ];
 
-// Create queue
 const queue = createQueue({ name: 'push_notification_code_2' });
 
-// Process each job
 for (const job of jobs) {
   const notificationJob = queue.createJob('push_notification_code_2', job);
 
